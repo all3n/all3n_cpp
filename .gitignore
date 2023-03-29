@@ -1,5 +1,5 @@
 # Prerequisites
-*.d
+#*.d
 
 # Compiled Object files
 *.slo
@@ -31,3 +31,5 @@
 *.out
 *.app
 /build
+/deps
+/compile_flags.txt

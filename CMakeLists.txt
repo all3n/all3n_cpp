@@ -17,25 +17,20 @@ message(STATUS "test sources:${TEST_SOURCES}")
 add_library(${PROJECT_NAME} ${SOURCES})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-#target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 
 install(TARGETS ${PROJECT_NAME}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-#install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
-install(FILES ${HEADERS} DESTINATION include)
+  #install(FILES ${HEADERS} DESTINATION include)
 
-
-
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-    URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+#
+install(DIRECTORY include/
+    DESTINATION include
 )
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+
+find_package(GTest)
 
 enable_testing()
 add_executable(

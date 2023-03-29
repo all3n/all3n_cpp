@@ -1,4 +1,3 @@
-
 #include "ac/common/string_utils.h"
 #include <sstream>
 
