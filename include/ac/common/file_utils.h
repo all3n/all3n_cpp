@@ -7,10 +7,12 @@
 namespace ac {
 namespace common {
 namespace file {
-inline bool exists(const std::string &name) {
-  std::ifstream f(name.c_str());
-  return f.good();
+inline bool exists (const std::string& name) {
+  struct stat buffer;   
+  return (stat (name.c_str(), &buffer) == 0); 
 }
+
+
 } // namespace file
 } // namespace common
 } // namespace ac

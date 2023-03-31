@@ -5,8 +5,9 @@ namespace ac {
 namespace common {
 namespace string {
 
-void split(const std::string &line, const std::string &delimiter,
+void Split(const std::string &line, const std::string &delimiter,
            std::vector<std::string> &out) {
+  out.clear();
   size_t pos_start = 0, pos_end, delim_len = delimiter.length();
   std::string token;
 
@@ -16,16 +17,6 @@ void split(const std::string &line, const std::string &delimiter,
     out.push_back(token);
   }
   out.push_back(line.substr(pos_start));
-}
-
-void split(const std::string &line, char delimiter,
-           std::vector<std::string> &out) {
-  std::stringstream ss(line);
-  std::string item;
-
-  while (getline(ss, item, delimiter)) {
-    out.push_back(item);
-  }
 }
 
 } // namespace string

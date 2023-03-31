@@ -12,15 +12,7 @@ namespace string {
  * delimiter[in]: delimiter string to split
  * out[out]: output vector string
  */
-void split(const std::string &line, const std::string &delimiter,
-           std::vector<std::string> &out);
-/**
- * split string by char
- * line[in] : input string
- * delimiter[in]: delimiter string to split
- * out[out]: output vector string
- */
-void split(const std::string &line, char delimiter,
+void Split(const std::string &line, const std::string &delimiter,
            std::vector<std::string> &out);
 
 } // namespace string

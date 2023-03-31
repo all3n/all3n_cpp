@@ -21,5 +21,5 @@ build_dep(){
   build_pkg repo=protocolbuffers/protobuf REVISION=v3.18.0 SHA1=38cbb2075f3d0a482cec578d76311ea38580dd6d
   build_pkg repo=bombela/backward-cpp REVISION=v1.6 
   build_pkg repo=apache/brpc REVISION=1.4.0 BUILD_OPTIONS="-DProtobuf_INCLUDE_DIR=$DEP_INSTALL_DIR/protocolbuffers/protobuf/latest/include"
-  #build_pkg repo=boost
+  build_pkg repo=boost REVISION=1.81.0 modules=system,math
 }

@@ -1,7 +1,7 @@
 BASE_CMAKE_OPTS="-DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release"
 
 build_pkg(){
-  BUILD_ARGS=(repo REPO_TYPE REVISION SHA1 BUILD_OPTIONS url CFLAGS CXXFLAGS)
+  BUILD_ARGS=(repo REPO_TYPE REVISION SHA1 BUILD_OPTIONS url CFLAGS CXXFLAGS modules)
   ac::parse_args $BUILD_ARGS "$@"
   : ${REPO_TYPE:=git_tgz}
   #local repo="$1"
@@ -9,11 +9,19 @@ build_pkg(){
   #local SHA1="$3"
   #local BUILD_OPTIONS="$4"
   local name=$(basename $repo)
-  if [[ -z $url ]];then
-    local url="https://api.github.com/repos/${repo}/tarball/${REVISION}"
-  fi
 
+  local BUILD_FN_FILE="$CUR_DIR/bin/build.d/$name.sh"
+  if [[ -f $BUILD_FN_FILE ]];then
+    . $BUILD_FN_FILE
+  fi
+  url_fun=${name}_url
+  if fun_exists $url_fun;then
+    url=$(eval $url_fun $REVISION)
+  fi
   
+  if [[ -z $url ]];then
+    url="https://api.github.com/repos/${repo}/tarball/${REVISION}"
+  fi
   local DEP_BUILD_DIR=$DEP_DIR/build/$repo/$REVISION
   local DEP_PKG=$DEP_PKG_DIR/$repo
   local DEP_SRC=$DEP_SRC_DIR/$repo/${REVISION}
@@ -57,10 +65,6 @@ build_pkg(){
   if [[ ! -f $DEP_REVISION ]];then
     cd $DEP_BUILD_DIR
     local custom_fun="build_$name"
-    local BUILD_FN_FILE="$CUR_DIR/bin/build.d/$name.sh"
-    if [[ -f $BUILD_FN_FILE ]];then
-      . $BUILD_FN_FILE
-    fi
     CMAKE_DIRS=$(find $DEP_INSTALL_DIR -name cmake -type d|xargs -d "\n"|sed -e 's/ /;/g')
     BINS_DIRS=$(find $DEP_INSTALL_DIR -name bin -type d|xargs -d "\n"|sed -e 's/ /:/g')
 
@@ -71,7 +75,6 @@ build_pkg(){
     export CPLUS_INCLUDE_PATH=$INCLUDE_DIRS
 
     export PATH=$BINS_DIRS:$PATH
-    protoc --version
     # https://cmake.org/cmake/help/latest/variable/CMAKE_PREFIX_PATH.html
     BASE_CMAKE_OPTS="$BASE_CMAKE_OPTS -DCMAKE_PREFIX_PATH=$CMAKE_DIRS"
  
